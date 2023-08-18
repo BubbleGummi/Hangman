@@ -6,40 +6,39 @@
         {
             while (true)
             {
-                Console.WriteLine("Give me a letter: "); 
-                string result = Console.ReadLine()!;
+                Console.WriteLine("Give me a letter: ");
+                string input = Console.ReadLine();
 
-                try
+                if (input.Length == 1 && char.TryParse(input, out char result))
                 {
-                    char results = Convert.ToChar(result); 
+                    char normalizedInput = char.ToLower(result);
 
-                    if(!char.IsLetter(results))
+                    if (!char.IsLetter(normalizedInput))
                     {
-                        throw new ArgumentException("Enter a valid letter."); 
+                        Console.WriteLine("Enter a valid letter.");
                     }
-                    if (correctLetters.Contains(results) || incorrectLetters.Contains(results))
+                    else if (correctLetters.Contains(normalizedInput) || incorrectLetters.Contains(normalizedInput))
                     {
-                        throw new ArgumentException("You have already said this. Try something else.");
+                        Console.WriteLine("You have already guessed this letter. Try something else.");
                     }
-                    return Char.ToLower(results);
+                    else
+                    {
+                        Console.WriteLine($"Correct letters: {string.Join(", ", correctLetters)}");
+                        Console.WriteLine($"Incorrect letters: {string.Join(", ", incorrectLetters)}");
+                        Console.WriteLine($"Selected letter: {normalizedInput}");
+                        return normalizedInput;
+                    }
                 }
-                catch (ArgumentException e)
+                else
                 {
-                    Console.WriteLine(e.Message);
-                }
-                catch
-                {
-                    Console.WriteLine("Enter a valid letter");
+                    Console.WriteLine("Enter a valid letter.");
                 }
             }
         }
+
         public static bool IsCorrectGuess(char input, string secretWord)
         {
-            if(secretWord.Contains(input))
-            {
-                return true;
-            }
-            return false;
+            return secretWord.Contains(input);
         }
     }
 }

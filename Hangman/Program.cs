@@ -1,62 +1,82 @@
 ﻿using Hangman.WordGenerator;
 using Hangman.Game;
+using System;
+using System.Net.Http;
+using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 public class Program
 {
-    static async Task Main(string[]args)
+    static async Task Main(string[] args)
     {
         try
         {
             string secretWord = await RandomWordGenerator.GetRandomWord();
-            secretWord = secretWord.ToLower();
+            Console.WriteLine("Received secretWord: " + secretWord);
 
-            Console.WriteLine("Random word: " + secretWord);
-            var correctLetters = new List<char>();
-            var incorrectLetters = new List<char>();
-
-            while (true)
+            if (secretWord != null)
             {
-                Print.Lives(incorrectLetters.Count);
-                Print.ShowPartialHidden(secretWord, correctLetters);
-                Print.ShowIncorrectGuess(incorrectLetters);
+                secretWord = secretWord.ToLower();
+                Console.WriteLine("Random word: " + secretWord);
 
-                char input = InputHandle.GetInput(correctLetters, incorrectLetters);
-                Console.WriteLine($"User input: {input}");
-                if (InputHandle.IsCorrectGuess(input, secretWord))
-                {
-                    correctLetters.Add(input);
-                }
-                else
-                {
-                    incorrectLetters.Add(input);
-                }
+                var correctLetters = new List<char>();
+                var incorrectLetters = new List<char>();
 
-                if (Winning.Won(secretWord, correctLetters))
+                while (true)
                 {
-                    Print.Winner(secretWord, correctLetters, incorrectLetters);
+                    Console.Clear();
 
-                    break;
-                }
+                    Print.Lives(incorrectLetters.Count);
+                    Print.ShowPartialHidden(secretWord, correctLetters);
+                    Print.ShowIncorrectGuess(incorrectLetters);
+                    Console.WriteLine("Received secretWord: " + secretWord);
+                    secretWord = secretWord.ToLower();
 
-                if (incorrectLetters.Count > 6)
-                {
-                    Print.Loser(secretWord);
-                    break;
+
+                    char input = InputHandle.GetInput(correctLetters, incorrectLetters);
+                    Console.WriteLine($"User input: {input}");
+
+                    if (InputHandle.IsCorrectGuess(input, secretWord))
+                    {
+                        correctLetters.Add(input);
+                    }
+                    else
+                    {
+                        incorrectLetters.Add(input);
+                    }
+
+                    if (Winning.Won(secretWord, correctLetters))
+                    {
+                        Console.WriteLine("You won!");
+                        Print.Winner(secretWord, correctLetters, incorrectLetters);
+                        break;
+                    }
+
+                    if (incorrectLetters.Count > 6)
+                    {
+                        Console.WriteLine("You lost!");
+                        Print.Loser(secretWord);
+                        break;
+
+                    }
+
+
                 }
-                Console.Clear();
             }
-
-
-
-
-            Console.WriteLine("Press enter to exit the game");
-            Console.ReadLine();
+            else
+            {
+                // Handle the case when the secretWord is null or couldn't be fetched.
+                Console.WriteLine("Failed to get a random word. Please try again later.");
+            }
         }
         catch (HttpRequestException ex)
         {
             // Handle the exception gracefully if an error occurs while retrieving the random word.
-            Console.WriteLine(ex.Message);
+            Console.WriteLine($"An error occurred while fetching a random word: {ex.Message}");
         }
+
+
+        Console.WriteLine("Press enter to exit the game");
+        Console.ReadLine();
     }
 }
-

@@ -10,6 +10,6 @@ public class Winning
         {
             return true;
         }
-        return false;
+        return guessedWord.ToLower() == secretWord;
     }
 }
