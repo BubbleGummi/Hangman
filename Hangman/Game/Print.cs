@@ -46,9 +46,7 @@
         {
             switch (guess)
             {
-                case 0:
-                    Console.WriteLine("\n\n\n\n\n\n\n=========");
-                    break;
+
                 case 1:
                     Console.WriteLine("      |");
                     Console.WriteLine("      |");

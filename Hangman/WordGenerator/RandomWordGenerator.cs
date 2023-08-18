@@ -1,5 +1,5 @@
 ﻿using Hangman.Models;
-using System.Text.Json;
+using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace Hangman.WordGenerator
@@ -26,27 +26,22 @@ namespace Hangman.WordGenerator
                         {"X-Api-Key", apikey }
                     }
                 };
+
+                Console.WriteLine($"Sending API request to: {fetchReq.RequestUri}");
+
                 var response = await client.SendAsync(fetchReq);
                 response.EnsureSuccessStatusCode();
 
                 string respBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Response body: {respBody}");
+                Console.WriteLine($"API Response status code: {response.StatusCode}");
+                Console.WriteLine($"API Response body: {respBody}");
 
-                //Console.WriteLine(respBody); // Print the API response to the console for debugging
-                RandomWordModel? RandomWord = JsonSerializer.Deserialize<RandomWordModel>(respBody);
-
-                /* string respBody = await response.Content.ReadAsStringAsync();
-                RandomWordModel? RandomWord = JsonSerializer.Deserialize<RandomWordModel>(respBody);
-                */
-                // If RandomWord is null or the Word property is null or empty, return a default word
-                if (RandomWord == null || string.IsNullOrEmpty(RandomWord.Word))
-                {
-                    return "default_word";
-                }
-                return RandomWord.Word.ToLower();
+                // Return the fetched random word
+                return respBody;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine($"An error occurred while fetching a random word: {ex.Message}");
                 throw new HttpRequestException("Could not get any random word, try again");
             }
         }
