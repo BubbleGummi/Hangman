@@ -1,82 +1,89 @@
-﻿using Hangman.WordGenerator;
-using Hangman.Game;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Text.Json;
+using Hangman.WordGenerator;
+using Hangman.Game;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-public class Program
+namespace Hangman
 {
-    static async Task Main(string[] args)
+    public class Program
     {
-        try
+        static async Task Main()
         {
-            string secretWord = await RandomWordGenerator.GetRandomWord();
-            Console.WriteLine("Received secretWord: " + secretWord);
-
-            if (secretWord != null)
+            try
             {
+                string secretWord = await RandomWordGenerator.GetRandomWord(); 
                 secretWord = secretWord.ToLower();
-                Console.WriteLine("Random word: " + secretWord);
+                Console.WriteLine("Received secretWord: " + secretWord);
 
-                var correctLetters = new List<char>();
-                var incorrectLetters = new List<char>();
-
-                while (true)
+                if (secretWord != null)
                 {
-                    Console.Clear();
+                    Console.WriteLine("Random word: " + secretWord);
 
-                    Print.Lives(incorrectLetters.Count);
-                    Print.ShowPartialHidden(secretWord, correctLetters);
-                    Print.ShowIncorrectGuess(incorrectLetters);
-                    Console.WriteLine("Received secretWord: " + secretWord);
-                    secretWord = secretWord.ToLower();
+                    var correctLetters = new List<char>();
+                    var incorrectLetters = new List<char>();
 
-
-                    char input = InputHandle.GetInput(correctLetters, incorrectLetters);
-                    Console.WriteLine($"User input: {input}");
-
-                    if (InputHandle.IsCorrectGuess(input, secretWord))
+                    while (true)
                     {
-                        correctLetters.Add(input);
+                        Console.Clear();
+
+                        Print.Lives(incorrectLetters.Count);
+                        Console.WriteLine("secretWord: " + secretWord);
+                        Console.WriteLine("correctLetters: " + string.Join(", ", correctLetters));
+                        Print.ShowPartialHidden(secretWord, correctLetters);
+
+                        Print.ShowIncorrectGuess(incorrectLetters);
+                        Console.WriteLine("Received secretWord: " + secretWord);
+
+
+                        char input = char.ToLower(InputHandle.GetInput(correctLetters, incorrectLetters));
+                        Console.WriteLine($"User input: {input}");
+
+                        if (InputHandle.IsCorrectGuess(input, secretWord))
+                        {
+                            correctLetters.Add(input);
+                        }
+                        else
+                        {
+                            incorrectLetters.Add(input);
+                        }
+
+                        if (Winning.Won(secretWord, correctLetters))
+                        {
+                            Console.WriteLine("You won!");
+                            Print.Winner(secretWord, correctLetters, incorrectLetters);
+                            break;
+                        }
+
+                        if (incorrectLetters.Count > 6)
+                        {
+                            Console.WriteLine("You lost!");
+                            Print.Loser(secretWord);
+                            break;
+
+                        }
+
+
                     }
-                    else
-                    {
-                        incorrectLetters.Add(input);
-                    }
-
-                    if (Winning.Won(secretWord, correctLetters))
-                    {
-                        Console.WriteLine("You won!");
-                        Print.Winner(secretWord, correctLetters, incorrectLetters);
-                        break;
-                    }
-
-                    if (incorrectLetters.Count > 6)
-                    {
-                        Console.WriteLine("You lost!");
-                        Print.Loser(secretWord);
-                        break;
-
-                    }
-
-
+                }
+                else
+                {
+                    // Handle the case when the secretWord is null or couldn't be fetched.
+                    Console.WriteLine("Failed to get a random word. Please try again later.");
                 }
             }
-            else
+            catch (HttpRequestException ex)
             {
-                // Handle the case when the secretWord is null or couldn't be fetched.
-                Console.WriteLine("Failed to get a random word. Please try again later.");
+                // Handle the exception gracefully if an error occurs while retrieving the random word.
+                Console.WriteLine($"An error occurred while fetching a random word: {ex.Message}");
             }
-        }
-        catch (HttpRequestException ex)
-        {
-            // Handle the exception gracefully if an error occurs while retrieving the random word.
-            Console.WriteLine($"An error occurred while fetching a random word: {ex.Message}");
-        }
 
 
-        Console.WriteLine("Press enter to exit the game");
-        Console.ReadLine();
+            Console.WriteLine("Press enter to exit the game");
+            Console.ReadLine();
+        }
     }
 }

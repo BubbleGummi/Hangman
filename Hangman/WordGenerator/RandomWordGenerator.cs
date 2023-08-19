@@ -1,7 +1,8 @@
-﻿using Hangman.Models;
+﻿using System;
 using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 namespace Hangman.WordGenerator
 {
@@ -12,7 +13,7 @@ namespace Hangman.WordGenerator
             var config = new ConfigurationBuilder()
                 .AddUserSecrets<RandomWordGenerator>()
                 .Build();
-            string? apikey = "pq0H7mvCz3aSKgvWOA7nqc4zhZhve0SYGjBNjkxK";
+            string apikey = "pq0H7mvCz3aSKgvWOA7nqc4zhZhve0SYGjBNjkxK";
 
             HttpClient client = new();
 
@@ -24,7 +25,7 @@ namespace Hangman.WordGenerator
                     RequestUri = new Uri("https://api.api-ninjas.com/v1/randomword"),
                     Headers =
                     {
-                        {"X-Api-Key", apikey }
+                        {"X-Api-Key", apikey}
                     }
                 };
 
@@ -34,7 +35,7 @@ namespace Hangman.WordGenerator
                 response.EnsureSuccessStatusCode();
 
                 string respBody = await response.Content.ReadAsStringAsync();
-                
+
                 Console.WriteLine($"API Response status code: {response.StatusCode}");
                 Console.WriteLine($"API Response body: {respBody}");
                 RandomWordModel randomword = JsonConvert.DeserializeObject<RandomWordModel>(respBody)!;

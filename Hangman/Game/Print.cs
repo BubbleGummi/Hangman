@@ -4,14 +4,17 @@
     {
         public static void ShowPartialHidden(string secretWord, List<char> guessedLetters)
         {
-            Console.WriteLine(GetGuessedLetters(secretWord, guessedLetters) + "\n");
+            string guessedWord = GetGuessedLetters(secretWord, guessedLetters);
+            Console.WriteLine(guessedWord);
         }
 
         public static string GetGuessedLetters(string secretWord, List<char> guessedLetters)
         {
+            Console.WriteLine("secretWord in GetGuessedLetters: " + secretWord);
+            Console.WriteLine("guessedLetters in GetGuessedLetters: " + string.Join(", ", guessedLetters));
             string print = "";
 
-            for(int i = 0; i < secretWord.Length; i++)
+            for (int i = 0; i < secretWord.Length; i++)
             {
                 if (guessedLetters.Contains(secretWord[i]))
                 {
@@ -22,8 +25,9 @@
                     print += "_";
                 }
             }
-            return (print);
+            return print;
         }
+
 
         public static void ShowIncorrectGuess(List<char> incorrectGuess)
         {
@@ -46,7 +50,14 @@
         {
             switch (guess)
             {
-
+                case 0:
+                    Console.WriteLine("       ");
+                    Console.WriteLine("       ");
+                    Console.WriteLine("       ");
+                    Console.WriteLine("       ");
+                    Console.WriteLine("       ");
+                    Console.WriteLine("=========");
+                    break;
                 case 1:
                     Console.WriteLine("      |");
                     Console.WriteLine("      |");
@@ -88,7 +99,7 @@
                     Console.WriteLine("\r\n  +---+");
                     Console.WriteLine("  |   |");
                     Console.WriteLine("  O   |");
-                    Console.WriteLine(" /|\\  |");
+                    Console.WriteLine(" /|   |");
                     Console.WriteLine("      |");
                     Console.WriteLine("      |");
                     Console.WriteLine("=========");
@@ -97,12 +108,21 @@
                     Console.WriteLine("\r\n  +---+");
                     Console.WriteLine("  |   |");
                     Console.WriteLine("  O   |");
-                    Console.WriteLine(" /|\\ |");
-                    Console.WriteLine(" /    |");
+                    Console.WriteLine(" /|\\  |");
+                    Console.WriteLine("      |");
                     Console.WriteLine("      |");
                     Console.WriteLine("=========");
                     break;
                 case 7:
+                    Console.WriteLine("\r\n  +---+");
+                    Console.WriteLine("  |   |");
+                    Console.WriteLine("  O   |");
+                    Console.WriteLine(" /|\\  |");
+                    Console.WriteLine(" /    |");
+                    Console.WriteLine("      |");
+                    Console.WriteLine("=========");
+                    break;
+                case 8:
                     Console.WriteLine("\r\n  +---+");
                     Console.WriteLine("  |   |");
                     Console.WriteLine("  O   |");
