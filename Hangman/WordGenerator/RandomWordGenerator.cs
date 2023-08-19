@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Hangman.Models;
 
 namespace Hangman.WordGenerator
 {
@@ -36,12 +35,12 @@ namespace Hangman.WordGenerator
                 response.EnsureSuccessStatusCode();
 
                 string respBody = await response.Content.ReadAsStringAsync();
-                respBody = respBody.Trim(); // Trim extra whitespace
+
                 Console.WriteLine($"API Response status code: {response.StatusCode}");
                 Console.WriteLine($"API Response body: {respBody}");
-
+                RandomWordModel randomword = JsonConvert.DeserializeObject<RandomWordModel>(respBody)!;
                 // Return the fetched random word
-                return respBody;
+                return randomword.Word;
             }
             catch (Exception ex)
             {
