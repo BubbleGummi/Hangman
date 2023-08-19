@@ -1,6 +1,7 @@
 ﻿using Hangman.Models;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace Hangman.WordGenerator
 {
@@ -33,11 +34,12 @@ namespace Hangman.WordGenerator
                 response.EnsureSuccessStatusCode();
 
                 string respBody = await response.Content.ReadAsStringAsync();
+                
                 Console.WriteLine($"API Response status code: {response.StatusCode}");
                 Console.WriteLine($"API Response body: {respBody}");
-
+                RandomWordModel randomword = JsonConvert.DeserializeObject<RandomWordModel>(respBody)!;
                 // Return the fetched random word
-                return respBody;
+                return randomword.Word;
             }
             catch (Exception ex)
             {
