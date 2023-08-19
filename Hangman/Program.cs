@@ -1,9 +1,5 @@
-﻿using Hangman.WordGenerator;
-using Hangman.Game;
-using System;
-using System.Net.Http;
-using System.Text.Json;
-using Microsoft.Extensions.Configuration;
+﻿using Hangman.Game;
+using Hangman.WordGenerator;
 
 public class Program
 {
@@ -17,7 +13,6 @@ public class Program
             if (secretWord != null)
             {
                 secretWord = secretWord.ToLower();
-                Console.WriteLine("Random word: " + secretWord);
 
                 var correctLetters = new List<char>();
                 var incorrectLetters = new List<char>();
@@ -29,9 +24,6 @@ public class Program
                     Print.Lives(incorrectLetters.Count);
                     Print.ShowPartialHidden(secretWord, correctLetters);
                     Print.ShowIncorrectGuess(incorrectLetters);
-                    Console.WriteLine("Received secretWord: " + secretWord);
-                    secretWord = secretWord.ToLower();
-
 
                     char input = InputHandle.GetInput(correctLetters, incorrectLetters);
                     Console.WriteLine($"User input: {input}");
