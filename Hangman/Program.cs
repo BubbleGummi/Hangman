@@ -17,18 +17,15 @@ namespace Hangman
             {
                 string secretWord = await RandomWordGenerator.GetRandomWord(); 
                 secretWord = secretWord.ToLower();
-                Console.WriteLine("Received secretWord: " + secretWord);
 
             if (secretWord != null)
             {
-                secretWord = secretWord.ToLower();
-
                     var correctLetters = new List<char>();
                     var incorrectLetters = new List<char>();
 
                     while (true)
                     {
-                        Console.Clear();
+                    Console.Clear();
 
                     Print.Lives(incorrectLetters.Count);
                     Print.ShowPartialHidden(secretWord, correctLetters);

@@ -10,8 +10,6 @@
 
         public static string GetGuessedLetters(string secretWord, List<char> guessedLetters)
         {
-            Console.WriteLine("secretWord in GetGuessedLetters: " + secretWord);
-            Console.WriteLine("guessedLetters in GetGuessedLetters: " + string.Join(", ", guessedLetters));
             string print = "";
 
             for (int i = 0; i < secretWord.Length; i++)
@@ -122,6 +120,7 @@
                     Console.WriteLine("      |");
                     Console.WriteLine("=========");
                     break;
+
                 case 8:
                     Console.WriteLine("\r\n  +---+");
                     Console.WriteLine("  |   |");
@@ -137,16 +136,36 @@
         }
         public static void Winner(string secretWord, List<char> correctLetters, List<char> incorrectGuess)
         {
-            Console.Clear(); 
-            Console.WriteLine("\r\n\r\n____    __  ____    _    _     __    _    ___  _  ._   _.  _  \r\n\\   \\  /   / /  _  \\  |  |  |  |    \\   \\  /  \\  /   / |  | |  \\ |  | |  | \r\n \\   \\/   / |  |  |  | |  |  |  |     \\   \\/    \\/   /  |  | |   \\|  | |  | \r\n  \\    /  |  |  |  | |  |  |  |      \\            /   |  | |  . `  | |  | \r\n    |  |    |  `--'  | |  `--'  |       \\    /\\    /    |  | |  |\\   | |__| \r\n    |__|     \\______/   \\______/         \\__/  \\__/     |__| |__| \\__| (_) \r\n                                                                            \r\n\r\n");
+            Console.Clear();
+            string asciiArt = @"
+                ____    ____   ______    __    __     ____    __    ____  __  .__   __.  __  
+                \   \  /   /  /  _   \  |  |  |  |    \   \  /  \  /   / |  | |  \ |  | |  |
+                 \   \/   /  |  |  |  | |  |  |  |     \   \/    \/   /  |  | |   \|  | |  |
+                  \      /   |  |  |  | |  |  |  |      \            /   |  | |  . `  | |  |
+                   |    |    |  `--'  | |  `--'  |       \    /\    /    |  | |  |\   | |__| 
+                   |____|     \______/   \______/         \__/  \__/     |__| |__| \__| (__)
+                    ";
+
+            Console.WriteLine(asciiArt);
             Console.WriteLine($"Nice, you got it right winner! \"{secretWord}\" in {correctLetters.Count + incorrectGuess.Count} guesses");
         }
 
         public static void Loser(string secretWord)
         {
             Console.Clear();
-            Lives(7);
-            Console.WriteLine("\r\n\r\n  _____      _      .___  _.  _____      ____   __    __  _____ .______       _  \r\n /  _____|    /   \\     |   \\/   | |   ____|    /  _  \\  \\   \\  /   / |   ___||   _  \\     |  | \r\n|  |  _     /  ^  \\    |  \\  /  | |  |__      |  |  |  |  \\   \\/   /  |  |__   |  |_)  |    |  | \r\n|  | |_ |   /  /_\\  \\   |  |\\/|  | |   _|     |  |  |  |   \\      /   |   __|  |      /     |  | \r\n|  |__| |  /  ____  \\  |  |  |  | |  |____    |  --'  |    \\    /    |  |____ |  |\\  \\----.|__| \r\n \\______| /__/     \\__\\ |__|  |__| |_______|    \\______/      \\__/     |_______|| _| ._____|(__) \r\n                                                                                                  \r\n\r\n");
+
+            string asciiArt = @"
+                 _______.      ___      .___  ___.  _______      ______   ____    ____  ______  .______       _  
+                /  _____|     /   \     |   \/   | |   ____|    /  __  \  \   \  /   / |   ___| |   _  \     |  | 
+                |  |  __.    /  ^  \    |  \  /  | |  |__      |  |  |  |  \   \/   /  |  |__   |  |_)  |    |  | 
+                |  | |_ |   /  /_\  \   |  |\/|  | |   _|      |  |  |  |   \      /   |   __|  |      /     |  | 
+                |  |__| |  /  ____   \  |  |  |  | |  |____    |  '--'  |    \    /    |  |____ |  |\  \     |__| 
+                 \______| /__/     \__\ |__|  |__| |_______|    \______/      \__/     |_______|| _| \__\    (__) 
+                                                                                                  
+                ";
+
+            Lives(9);
+            Console.WriteLine(asciiArt);
             Console.WriteLine($"\nThe correct word was \"{secretWord}\". Better luck next time!");
         }
     }
