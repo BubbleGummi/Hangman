@@ -7,9 +7,9 @@
             while (true)
             {
                 Console.WriteLine("Give me a letter: ");
-                string input = Console.ReadLine();
+                string? input = Console.ReadLine();
 
-                if (input.Length == 1 && char.TryParse(input, out char result))
+                if (input != null && input.Length == 1 && char.TryParse(input, out char result))
                 {
                     char normalizedInput = char.ToLower(result);
 
